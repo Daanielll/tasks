@@ -1,0 +1,8 @@
+20231123	00:05:17	2242038f-dc5c-44d6-91d4-3ad926781285	Error: Not allowed by CORS	OPTIONS	/	https://cdpn.io
+20231123	00:05:17	399fde63-3949-4665-8adc-1aab92d5565f	Error: Not allowed by CORS	GET	/	https://cdpn.io
+20231124	14:24:31	0d48f79a-387f-413e-8926-2d71ecab41bb	SyntaxError: Unexpected token } in JSON at position 91	POST	/users	undefined
+20231124	14:25:05	cf0fdd50-c4d9-4a34-bbe1-72ec9311db4f	SyntaxError: Unexpected token " in JSON at position 3	POST	/users	undefined
+20231127	01:26:20	a56c95c1-ba8a-4fe7-b3a6-052ff06746f1	Error: Not allowed by CORS	GET	/	http://localhost:5173
+20231127	01:26:21	3ef3b3ab-27a0-4da8-947c-66ae600d8132	Error: Not allowed by CORS	GET	/	http://localhost:5173
+20231127	01:26:23	53ebb7b8-1a82-42ce-9f07-3b444188e617	Error: Not allowed by CORS	GET	/	http://localhost:5173
+20231127	01:26:27	180e7ffe-de56-4d69-94c3-5ea55b96ff6b	Error: Not allowed by CORS	GET	/	http://localhost:5173
