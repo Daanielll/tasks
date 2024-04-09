@@ -329,3 +329,10 @@
 20231202	13:01:41	6ba9dd6a-6aaa-42ff-ae3f-f97d0673733a	GET	/users/65639acd0b6dee64d0192850/65639acd0b6dee64d0192851	undefined
 20231202	13:01:41	99afa356-eac4-472f-960a-697be44c754b	GET	/favicon.ico	undefined
 20231202	13:01:41	143a1a68-8e0e-4289-85b4-e84ef67f50e9	GET	/images/icons/gear.png	undefined
+20240409	23:36:44	1db1e713-bfe1-4921-9216-00f227b109b5	GET	/	undefined
+20240409	23:36:44	ddca68bf-d02e-443d-88c4-4f2068a7bb11	GET	/css/style.css	undefined
+20240409	23:36:44	edddcc93-f3e8-40bc-8f16-5c06a30d91b9	GET	/favicon.ico	undefined
+20240409	23:36:53	e505a0cb-9f9d-46e9-914c-1e7cf2c3ef57	GET	/users/	undefined
+20240409	23:37:41	be9dc857-f407-4c59-8b6a-9696f22c9c63	GET	/users/65639acd0b6dee64d0192850/tasks	undefined
+20240409	23:37:47	1dfcd520-d16e-40ac-acc3-1cfe40af71fd	GET	/users/65639acd0b6dee64d0192850/	undefined
+20240409	23:37:54	da742bfd-b2d5-4d9d-a102-e261a19ffb54	GET	/users/65639acd0b6dee64d0192850/tasks	undefined

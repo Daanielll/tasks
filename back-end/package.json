@@ -1,7 +1,7 @@
 {
   "name": "todo-full",
   "version": "1.0.0",
-  "description": "TODO MEAN project",
+  "description": "TODO MERN project",
   "main": "server.js",
   "scripts": {
     "start": "node server",
