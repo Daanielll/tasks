@@ -1,7 +1,14 @@
+import { Sidebar } from "./components/Sidebar";
+import { Home } from "./components/main/Home";
+import "tailwindcss/tailwind.css";
+
 function App() {
   return (
     <>
-      <h1>App</h1>
+      <div className="flex h-screen">
+        <Sidebar></Sidebar>
+        <Home></Home>
+      </div>
     </>
   );
 }
