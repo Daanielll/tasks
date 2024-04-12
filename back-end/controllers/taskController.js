@@ -20,8 +20,11 @@ const getAllGroups = asyncHandler(async (req, res) => {
   const user = await User.findById(userId);
 
   if (!user) return res.status(404).json({ message: "Cannot find user" });
-
-  res.json({ data: user.groups || [] });
+  const userGroups = user.groups.map((item) => ({
+    _id: item._id,
+    group_name: item.group_name,
+  }));
+  res.json({ data: userGroups || [] });
 });
 
 // POST /users/:user/groups

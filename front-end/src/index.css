@@ -6,3 +6,9 @@
 * {
   font-family: "Rubik", sans-serif, serif;
 }
+body {
+  background-color: #1c1c1c;
+}
+
+@layer components {
+}
