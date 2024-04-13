@@ -12,13 +12,24 @@ export function Sidebar() {
   const user = userData.isFetched ? userData.data.profile.user : {};
   if (userData.isLoading) return <h1>Loading..</h1>;
 
-  const addNewGroup = async (name) => {
-    const { data } = await axios.post(
-      `http://localhost:3500/users/65639acd0b6dee64d0192850/groups`,
+  // const addNewGroup = async (name) => {
+  //   const { data } = await axios.post(
+  //     `http://localhost:3500/users/65639acd0b6dee64d0192850/groups`,
 
-      { group_name: name }
-    );
-    return data;
+  //     { group_name: name }
+  //   );
+  //   return data;
+  // };
+  const useNewGroup = (newGroupName) => {
+    return useMutation(async () => {
+      const { data } = await axios.post(
+        `http://localhost:3500/users/65639acd0b6dee64d0192850/groups`,
+        {
+          group_name: newGroupName, // Assuming the API expects an object with a 'name' property
+        }
+      );
+      return data; // Return the response data directly
+    });
   };
   const handleSubmit = (e) => {
     e.preventDefault(); // Stops the form from submitting in the default way
