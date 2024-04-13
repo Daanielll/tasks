@@ -1,12 +1,30 @@
-import { useMemo } from "react";
+import { useState } from "react";
 import { useUser } from "../hooks/use-user";
 import { Link } from "react-router-dom";
+import { useNewGroup } from "../hooks/use-new-group";
+import axios from "axios";
 
 export function Sidebar() {
+  const [showNewGroup, setShowNewGroup] = useState(false);
+  const [groupName, setGroupName] = useState("");
   const userData = useUser("65639acd0b6dee64d0192850");
   const groups = userData.isFetched ? userData.data.groups.data : [];
   const user = userData.isFetched ? userData.data.profile.user : {};
   if (userData.isLoading) return <h1>Loading..</h1>;
+
+  const addNewGroup = async (name) => {
+    const { data } = await axios.post(
+      `http://localhost:3500/users/65639acd0b6dee64d0192850/groups`,
+
+      { group_name: name }
+    );
+    return data;
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Stops the form from submitting in the default way
+    console.log(addNewGroup(groupName));
+    setShowNewGroup(false); // Outputs the current input value to the console
+  };
   return (
     <>
       <div className="w-64 p-4 bg-sidebar text-white border-r-2 border-[#2b2b2b]">
@@ -50,10 +68,28 @@ export function Sidebar() {
         {/* User Groups */}
         <h5 className="text-sm text-secondary-text mt-8 mb-2 font-light flex justify-between group mx-2">
           Groups
-          <span className="text-white font-medium text-xs underline opacity-30 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer">
+          <span
+            onClick={() => setShowNewGroup(!showNewGroup)}
+            className="text-white font-medium text-xs underline opacity-30 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+          >
             New
           </span>
         </h5>
+        <form
+          onSubmit={handleSubmit}
+          className={`${showNewGroup ? "block" : "hidden"}`}
+        >
+          <input
+            value={groupName}
+            onChange={(e) => setGroupName(e.target.value)}
+            type="text"
+            className="bg-default p-2"
+          />
+          <button type="button" onClick={() => setShowNewGroup(false)}>
+            Cancel
+          </button>
+          <button type="submit">Submit</button>
+        </form>
         <ul className="text-white font-light text-sm flex flex-col gap-1 mb-2 child:cursor-pointer">
           {groups.map((gr, i) => {
             if (i == 0) return;
