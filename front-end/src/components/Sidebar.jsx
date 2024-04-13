@@ -3,37 +3,48 @@ import { useUser } from "../hooks/use-user";
 import { Link } from "react-router-dom";
 import { useNewGroup } from "../hooks/use-new-group";
 import axios from "axios";
+import useMutation from "@tanstack/react-query";
 
 export function Sidebar() {
   const [showNewGroup, setShowNewGroup] = useState(false);
   const [groupName, setGroupName] = useState("");
-  const userData = useUser("65639acd0b6dee64d0192850");
+  const userId = "65639acd0b6dee64d0192850";
+  const userData = useUser(userId);
+
   const groups = userData.isFetched ? userData.data.groups.data : [];
   const user = userData.isFetched ? userData.data.profile.user : {};
   if (userData.isLoading) return <h1>Loading..</h1>;
 
-  // const addNewGroup = async (name) => {
-  //   const { data } = await axios.post(
-  //     `http://localhost:3500/users/65639acd0b6dee64d0192850/groups`,
-
-  //     { group_name: name }
-  //   );
-  //   return data;
+  // const {
+  //   mutateAsync: addTodoMutation,
+  // } = () => {
+  //   return useMutation(async (newGroupName) => {
+  //     const { data } = await axios.post(
+  //       `http://localhost:3500/users/${userId}/groups`,
+  //       {
+  //         group_name: newGroupName,
+  //       }
+  //     );
+  //     return data;
+  //   });
   // };
-  const useNewGroup = (newGroupName) => {
-    return useMutation(async () => {
-      const { data } = await axios.post(
-        `http://localhost:3500/users/65639acd0b6dee64d0192850/groups`,
-        {
-          group_name: newGroupName, // Assuming the API expects an object with a 'name' property
-        }
-      );
-      return data; // Return the response data directly
-    });
-  };
-  const handleSubmit = (e) => {
+
+  const { mutateAsync: addTodoMutation } = useMutation({
+    mutationFn: async (newGroupName) => {
+      await axios.post("http://localhost:3500/users/${userId}/groups", {
+        group_name: newGroupName,
+      });
+    },
+  });
+
+  const handleSubmit = async (e) => {
     e.preventDefault(); // Stops the form from submitting in the default way
-    console.log(addNewGroup(groupName));
+    try {
+      await addTodoMutation(groupName);
+      setGroupName("");
+    } catch (e) {
+      console.log(e);
+    }
     setShowNewGroup(false); // Outputs the current input value to the console
   };
   return (
