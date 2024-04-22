@@ -16,15 +16,17 @@ router.route("/:userId/tasks").get(taskController.getAllTasks);
 router
   .route("/:userId/groups")
   .get(taskController.getAllGroups)
-  .post(taskController.createNewGroup)
-  .delete(taskController.deleteGroup);
+  .post(taskController.createNewGroup);
 router
   .route("/:userId/:groupId")
   .get(taskController.getGroupTasks)
   .post(taskController.createNewTask)
-  .delete(taskController.deleteTask);
+  .delete(taskController.deleteGroup);
+
 router
   .route("/:userId/:groupId/:taskId")
   .get(taskController.getSingleTask)
   .patch(taskController.updateTask);
+// .delete(taskController.deleteTask);
+
 module.exports = router;

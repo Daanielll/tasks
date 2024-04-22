@@ -1,11 +1,26 @@
 import { format, parseISO } from "date-fns";
+import { useUpdateTask } from "../../hooks/use-update-task";
 
-export function Card({ task_name, description, created_at, due_date, status }) {
+export function Card({ task_name, due_date, status, _id, userId, group_id }) {
+  const updateTask = useUpdateTask(userId, _id, group_id);
+  const handleClick = () => {
+    const updatedStatus =
+      status == "todo"
+        ? "in-progress"
+        : status == "in-progress"
+        ? "completed"
+        : "todo";
+    updateTask({ status: updatedStatus });
+    console.log("changed to", updatedStatus, task_name, _id);
+  };
   return (
     <>
       <div className="w-[30rem] p-3 rounded-md bg-default flex flex-col justify-between cursor-pointer hover:translate-x-1 transition-transform duration-200">
         <div className="flex gap-4 items-center">
-          <div className="w-8 h-5 p-1 rounded-full border border-secondary-text">
+          <div
+            onClick={handleClick}
+            className="w-8 h-5 p-1 rounded-full border border-secondary-text"
+          >
             <div
               className={`h-full aspect-square rounded-full relative transition-all duration-150 ${
                 status == "todo"

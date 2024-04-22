@@ -54,13 +54,12 @@ const createNewGroup = asyncHandler(async (req, res) => {
   });
 });
 
-// DELETE /users/:user/groups/
+// DELETE /users/:user/:groupId/
 const deleteGroup = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
-  const { id } = req.body;
+  const { userId, groupId } = req.params;
   if (!userId) return res.status(400).json({ message: "User ID required" });
-  if (!id) return res.status(400).json({ message: "Group ID required" });
-  if (id == "index")
+  if (!groupId) return res.status(400).json({ message: "Group ID required" });
+  if (groupId == "index")
     return res.status(400).json({ message: "Cannot delete index group" });
   const user = await User.findById(userId).exec();
   if (!user)
@@ -68,10 +67,10 @@ const deleteGroup = asyncHandler(async (req, res) => {
       .status(400)
       .json({ message: `Cannot find a user with ID ${userId}` });
 
-  user.groups.pull({ _id: id });
+  user.groups.pull({ _id: groupId });
   await user.save();
   res.json({
-    message: `Group with ID ${id} deleted for user ${user.username} With an ID of ${userId}`,
+    message: `Group with ID ${groupId} deleted for user ${user.username} With an ID of ${userId}`,
   });
 });
 
@@ -87,8 +86,7 @@ const getGroupTasks = asyncHandler(async (req, res) => {
   if (!group) {
     return res.status(404).json({ message: "Group not found for the user" });
   }
-
-  res.json({ data: group.tasks || [] });
+  res.json({ data: group.tasks, group_name: group.group_name || [] });
 });
 
 // POST /users/:user/:group/
@@ -136,7 +134,8 @@ const deleteTask = asyncHandler(async (req, res) => {
 // PATCH /users/:user/:group/:task/
 const updateTask = asyncHandler(async (req, res) => {
   const { userId, groupId, taskId } = req.params;
-  const { task_name, description, due_date, color, text_color } = req.body;
+  const { task_name, description, due_date, color, text_color, status } =
+    req.body;
   const user = await User.findById(userId);
 
   if (!user) return res.status(404).json({ message: "Cannot find user" });
@@ -157,9 +156,10 @@ const updateTask = asyncHandler(async (req, res) => {
   task.due_date = due_date || task.due_date;
   task.color = color || task.color;
   task.text_color = text_color || task.text_color;
+  task.status = status || task.status;
   await user.save();
   res.json({
-    message: `Updated task ${task_name} in group ${group.group_name} to user ${user.username} with an ID of ${userId}`,
+    message: `Updated task ${taskId} in group ${group.group_name} to user ${user.username} with an ID of ${userId}`,
   });
 });
 
@@ -180,8 +180,11 @@ const getSingleTask = asyncHandler(async (req, res) => {
   if (!task) {
     return res.status(404).json({ message: "Task not found in the group" });
   }
-
-  res.json({ data: task || [] });
+  const taskWithGroupId = {
+    ...task.toObject(),
+    group_id: group._id,
+  };
+  res.json({ data: taskWithGroupId || [] });
 });
 
 module.exports = {

@@ -1,51 +1,38 @@
 import { useState } from "react";
 import { useUser } from "../hooks/use-user";
 import { Link } from "react-router-dom";
-import { useNewGroup } from "../hooks/use-new-group";
 import axios from "axios";
-import useMutation from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function Sidebar() {
+  const queryClient = useQueryClient();
   const [showNewGroup, setShowNewGroup] = useState(false);
   const [groupName, setGroupName] = useState("");
   const userId = "65639acd0b6dee64d0192850";
   const userData = useUser(userId);
-
+  const { mutateAsync: addGroupMutation } = useMutation({
+    mutationFn: async (newGroupName) => {
+      await axios.post(`http://localhost:3501/users/${userId}/groups`, {
+        group_name: newGroupName,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["userProfileAndGroups"]);
+    },
+  });
   const groups = userData.isFetched ? userData.data.groups.data : [];
   const user = userData.isFetched ? userData.data.profile.user : {};
   if (userData.isLoading) return <h1>Loading..</h1>;
 
-  // const {
-  //   mutateAsync: addTodoMutation,
-  // } = () => {
-  //   return useMutation(async (newGroupName) => {
-  //     const { data } = await axios.post(
-  //       `http://localhost:3500/users/${userId}/groups`,
-  //       {
-  //         group_name: newGroupName,
-  //       }
-  //     );
-  //     return data;
-  //   });
-  // };
-
-  const { mutateAsync: addTodoMutation } = useMutation({
-    mutationFn: async (newGroupName) => {
-      await axios.post("http://localhost:3500/users/${userId}/groups", {
-        group_name: newGroupName,
-      });
-    },
-  });
-
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Stops the form from submitting in the default way
+    e.preventDefault();
     try {
-      await addTodoMutation(groupName);
+      await addGroupMutation(groupName);
       setGroupName("");
     } catch (e) {
       console.log(e);
     }
-    setShowNewGroup(false); // Outputs the current input value to the console
+    setShowNewGroup(false);
   };
   return (
     <>
@@ -92,25 +79,30 @@ export function Sidebar() {
           Groups
           <span
             onClick={() => setShowNewGroup(!showNewGroup)}
-            className="text-white font-medium text-xs underline opacity-30 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+            className={`text-white font-medium text-xs underline opacity-30 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer  ${
+              showNewGroup ? "opacity-100" : ""
+            }`}
           >
-            New
+            {showNewGroup ? "Hide" : "New"}
           </span>
         </h5>
         <form
           onSubmit={handleSubmit}
-          className={`${showNewGroup ? "block" : "hidden"}`}
+          className={`${
+            showNewGroup ? "block" : "hidden"
+          } flex flex-col my-3 gap-4 text-white text-sm bg-[#181818] p-5 overflow-hidden items-center justify-center rounded-lg`}
         >
           <input
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
             type="text"
-            className="bg-default p-2"
+            className="bg-default p-2 px-3 focus:outline-none rounded-md w-full"
+            placeholder="Group name"
           />
-          <button type="button" onClick={() => setShowNewGroup(false)}>
-            Cancel
+
+          <button className="bg-[#007AFF] w-full p-2 rounded-md" type="submit">
+            Submit
           </button>
-          <button type="submit">Submit</button>
         </form>
         <ul className="text-white font-light text-sm flex flex-col gap-1 mb-2 child:cursor-pointer">
           {groups.map((gr, i) => {

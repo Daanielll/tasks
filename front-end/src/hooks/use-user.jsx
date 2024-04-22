@@ -7,10 +7,10 @@ export const useUser = (user) => {
     queryFn: async () => {
       const results = await Promise.all([
         axios
-          .get(`http://localhost:3500/users/${user}`)
+          .get(`http://localhost:3501/users/${user}`)
           .then((res) => res.data),
         axios
-          .get(`http://localhost:3500/users/${user}/groups`)
+          .get(`http://localhost:3501/users/${user}/groups`)
           .then((res) => res.data),
       ]);
       const [profile, groups] = results;
