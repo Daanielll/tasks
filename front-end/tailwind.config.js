@@ -7,6 +7,8 @@ export default {
         default: "#282828",
         sidebar: "#1c1c1c",
         "secondary-text": "#a9a9a9",
+        dark: "#171717",
+        "light-text": "#d9d9d9",
       },
     },
   },
